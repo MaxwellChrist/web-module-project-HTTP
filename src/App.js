@@ -6,10 +6,12 @@ import EditMovieForm from './components/EditMovieForm';
 import MovieHeader from './components/MovieHeader';
 import FavoriteMovieList from './components/FavoriteMovieList';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 const App = (props) => {
   const [movies, setMovies] = useState([]);
   const [favoriteMovies, setFavoriteMovies] = useState([]);
+  const { push } = useHistory();
 
   useEffect(()=>{
     axios.get('http://localhost:9000/api/movies')
@@ -22,6 +24,15 @@ const App = (props) => {
   }, []);
 
   const deleteMovie = (id)=> {
+    axios.delete('http://localhost:9000/api/movies/' + id)
+    .then(res => {
+        console.log(res.data)
+        setMovies(res.data);
+        push("/movies");
+    })
+    .catch(err => {
+        console.log(err)
+    })
   }
 
   const addToFavorites = (movie) => {
@@ -47,7 +58,7 @@ const App = (props) => {
             </Route>
 
             <Route path="/movies/:id">
-              <Movie/>
+              <Movie deleteMovie={deleteMovie} setMovies={setMovies}/>
             </Route>
 
             <Route path="/movies">
