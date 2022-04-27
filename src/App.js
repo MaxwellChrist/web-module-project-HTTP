@@ -7,6 +7,8 @@ import MovieHeader from './components/MovieHeader';
 import FavoriteMovieList from './components/FavoriteMovieList';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import AddMovieForm from './components/AddMovieForm'
+import DeleteMovieModal from "./components/DeleteMovieModal";
 
 const App = (props) => {
   const [movies, setMovies] = useState([]);
@@ -23,12 +25,16 @@ const App = (props) => {
       });
   }, []);
 
+  const renderMovieModal = (id) => {
+    push(`/movies/delete/${id}`)
+  }
+
   const deleteMovie = (id)=> {
-    axios.delete('http://localhost:9000/api/movies/' + id)
+    axios.delete(`http://localhost:9000/api/movies/${id}`)
     .then(res => {
         console.log(res.data)
         setMovies(res.data);
-        push("/movies");
+        push('/movies');
     })
     .catch(err => {
         console.log(err)
@@ -56,11 +62,19 @@ const App = (props) => {
               render={() => <EditMovieForm setMovies={setMovies} />}
             >
             </Route>
-
-            <Route path="/movies/:id">
-              <Movie deleteMovie={deleteMovie} setMovies={setMovies}/>
+            
+            <Route path="/movies/add">
+              <AddMovieForm setMovies={setMovies}/>
             </Route>
 
+            <Route path="/movies/delete/:id">
+              <DeleteMovieModal deleteMovie={deleteMovie}/>
+            </Route>
+
+            <Route path="/movies/:id">
+              <Movie renderMovieModal={renderMovieModal} setMovies={setMovies}/>
+            </Route>
+            
             <Route path="/movies">
               <MovieList movies={movies}/>
             </Route>
