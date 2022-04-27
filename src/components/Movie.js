@@ -5,7 +5,6 @@ import axios from 'axios';
 
 const Movie = (props) => {
     const { addToFavorites, setMovies, renderMovieModal } = props;
-
     const [movie, setMovie] = useState('');
 
     const { id } = useParams();
@@ -20,6 +19,9 @@ const Movie = (props) => {
                 console.log(err.response);
             })
     }, [id]);
+
+    console.log(id)
+    console.log(movie)
 
     return(<div className="modal-page col">
         <div className="modal-dialog">
@@ -50,7 +52,7 @@ const Movie = (props) => {
                         </section>
                         
                         <section>
-                            <span className="m-2 btn btn-dark">Favorite</span>
+                            <span onClick={() => addToFavorites(movie)} className="m-2 btn btn-dark">Favorite</span>
                             <Link to={`/movies/edit/${movie.id}`} className="m-2 btn btn-success">Edit</Link>
                             <span className="delete"><input onClick={() => renderMovieModal(id)} type="button" className="m-2 btn btn-danger" value="Delete"/></span>
                         </section>

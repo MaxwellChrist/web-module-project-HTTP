@@ -41,8 +41,14 @@ const App = (props) => {
     })
   }
 
-  const addToFavorites = (movie) => {
-    
+  const addToFavorites = (item) => {
+    if(!favoriteMovies.some(newItem => newItem.id === item.id)) {
+      console.log(item)
+      setFavoriteMovies([
+        ...favoriteMovies,
+        item
+      ])
+    }
   }
 
   return (
@@ -72,7 +78,7 @@ const App = (props) => {
             </Route>
 
             <Route path="/movies/:id">
-              <Movie renderMovieModal={renderMovieModal} setMovies={setMovies}/>
+              <Movie renderMovieModal={renderMovieModal} setMovies={setMovies} addToFavorites={addToFavorites} />
             </Route>
             
             <Route path="/movies">
@@ -91,4 +97,3 @@ const App = (props) => {
 
 
 export default App;
-
